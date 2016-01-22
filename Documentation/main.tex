@@ -1,0 +1,43 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{uniinput}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\title{DMFT CP-Project}
+
+\begin{document}
+\maketitle
+
+\section{Fouriertransform}
+Hello Guys, Tobias said we should first try to do the Inverse Fouriertransform of
+\begin{equation}
+G(i ω)= \frac{1}{i ω_n + a}
+\end{equation}
+But what is the solution $(β=1)$ to
+\begin{equation}
+G(τ)= \sum_{ω_n}\frac{1}{i ω_n + a} e^{-i ω_n τ}
+\end{equation}
+Mathematica says this sum does not converge. 
+
+
+From the inverse transform, it follows that:
+\begin{equation}
+\frac{-1}{2} \int_0^{\beta} d\tau e^{i\omega_n \tau} = \frac{-1}{2i\omega_n} ( e^{i\omega_n \beta} - 1) = \frac{1}{i\omega_n}
+\end{equation}
+
+Furthermore:
+
+\begin{equation}
+\sum_{\omega_n} \frac{1}{i\omega_n + a} e^{-i\omega_n \tau} = - n_{FD} (-a) e^{a \tau} 
+\end{equation}
+
+
+\begin{equation}
+\Sigma(i\omega) = - U^2 \sum_{\nu, q} G_0(i\nu) G_0(i\omega-i\nu+iq) G_0(iq) = -U^2 \int d\tau G_0(\tau)^3 e^{i\omega \tau} 
+\end{equation}
+
+\end{document}
