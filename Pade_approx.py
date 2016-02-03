@@ -1,12 +1,12 @@
 
 # coding: utf-8
 
-# In[17]:
+# In[1]:
 
 get_ipython().magic('pylab')
 
 
-# In[24]:
+# In[2]:
 
 def C_z(z_values, f_values, z): #z_values are the points at which we know the value of our function, f_values the values of our function at those points, z the point where we want to evaluate the continued fraction C_z;
 
@@ -56,7 +56,17 @@ print(C_z(points,values,2))
 
 
 
-# In[ ]:
+# In[7]:
+
+f = lambda z: C_z(points,values,z)
 
 
+# In[9]:
+
+fvectorized = np.vectorize(f)
+
+
+# In[10]:
+
+fvectorized(points)
 
