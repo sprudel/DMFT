@@ -1,0 +1,172 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, top=27mm, left=25mm, right=20mm, bottom=20mm, headsep=0mm, footskip=12mm}
+
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{commath}
+
+
+\begin{document}
+
+\section{The impurity problem in 2\textsuperscript{nd} order perturbation theory}
+
+Translating the Hamiltonian formalism into a functional integral one, we get the action
+%
+\begin{gather*}
+S = \
+	%int \sum_{\sigma} \bar{c}_{\sigma} (\tau) \partial_{\tau} c_{\sigma} (\tau) 
+	%+ H_{\text{atom}} ( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau))
+	%+ \sum_{l, \sigma} \bar{a}_{\sigma} (\tau) \partial_{\tau} a_{\sigma} (\tau) \\
+	%+ H_{\text{\text{bath}}} ( \bar{a}_{\sigma} (\tau), a_{\sigma} (\tau)) 
+	%+ H_{\text{\text{coupling}}} (\bar{c}_{\sigma} (\tau), c_{\sigma} (\tau), \bar{a}_{\sigma} (\tau), a_{\sigma} (\tau))
+	%\dif \tau
+	\int_0^{\beta} \sum_{\sigma} \bar{c}_{\sigma} (\tau) \partial_{\tau} c_{\sigma} (\tau) 
+	+ \sum_{l, \sigma} \bar{a}_{\sigma} (\tau) \partial_{\tau} a_{\sigma} (\tau)
+	+ H_{\text{AIM}} \big( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau), \bar{a}_{\sigma} (\tau), a_{\sigma} (\tau) \big)
+	\dif \tau
+	\\
+	 = \int_0^{\beta}  H_{\text{atom}} \big( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau) \big)  \dif \tau 
+	+ \sum_{\sigma, \omega} \bar{c}_{\sigma, \omega} 
+	\Big( \sum_{l} \frac{V_l}{i\omega - \tilde{\epsilon}_l} - i\omega \Big)
+	c_{\sigma, \omega} 
+	\\
+	+ \sum_{l, \sigma, \omega} \big( \bar{a}_{l, \sigma, \omega} + \frac{V_l}{\tilde{\epsilon}_l - i\omega} \bar{c}_{\sigma, \omega} \big) 
+	\big( \tilde{\epsilon_l} - i\omega \big)
+	\big( a_{l, \sigma, \omega} + \frac{V_l}{\tilde{\epsilon}_l - i\omega} c_{\sigma, \omega} \big) 
+\end{gather*}
+%
+where some arrangements and usage of the usual Matsubara-Fourier transform was made. We use the convention
+$
+c_{\sigma} (\tau) = \sum_{\omega} e^{-i\omega \tau} c_{\sigma, \omega}
+$
+where the sum runs over fermionic Matsubara frequencies and a prefactor of $1/ \beta$ is understood, such that $c_{\sigma, \omega}$ has the dimension of inverse energy. Correspondingly, a Kronecker-delta of Matsubara frequencies contains a factor of $\beta$. In the above expression, the bath can easily be integrated out. The case of half filling, $\mu = U/2$, can be equivalently written with a modified interaction and zero chemical potential. Dropping a constant energy term, one has
+%
+\begin{gather*}
+S_{\text{eff}} = S_0 + S_{\text{int}} =
+	 - \sum_{\sigma, \omega} \bar{c}_{\sigma, \omega} G_{0, \omega}^{-1}
+	c_{\sigma, \omega} 
+	%\\
+	+ U \sum_{Q} \Big( 
+	\underbrace{
+	\sum_{k} \bar{c}_{\uparrow,k+Q} c_{\uparrow,k} - \frac{1}{2} \delta_{Q,0} 
+	}_{C_Q}
+	\Big) \Big(
+	\underbrace{
+	\sum_{q} \bar{c}_{\downarrow,q-Q} c_{\downarrow,q} - \frac{1}{2} \delta_{Q,0}
+	}_{D_{-Q}}
+	\Big)
+\, .
+\end{gather*}
+
+A perturbative expansion of the Green's function exploits (consider w.l.o.g. $c_{\omega} = c_{\uparrow, \omega}$) 
+%
+\begin{equation*}
+\beta G(i\omega) = - \langle c_{\omega} \bar{c}_{\omega} \rangle
+	= - \frac{\langle c_{\omega} \bar{c}_{\omega} e^{-S_{\text{int}}} \rangle_0}
+	{\langle e^{-S_{\text{int}}} \rangle_0}
+	= \beta G_{0, \omega} - \frac{1}{2} \langle 
+	\big( c_{\omega} \bar{c}_{\omega} + \beta G_{0, \omega} \big)
+	 S_{\text{int}}^2 \rangle_0 + \mathcal{O}(U^3)
+\, .
+\end{equation*}
+%
+Here, first order terms vanish due to Wick's theorem and the fact that without interaction, the resulting tight-binding model at zero chemical potential is half filled in the ground state,
+%
+\begin{equation*}
+\sum_{\omega} G_{0, \omega} = \langle n_{\sigma} \rangle_0 = \frac{1}{2}
+\quad
+\Rightarrow
+\quad
+\langle C_Q \rangle_0 =  \big( \sum_{k} G_{0, \omega} - \frac{1}{2} \big) \delta_{Q,0} = 0
+	= \langle D_Q \rangle_0
+\, .
+\end{equation*}
+%
+For the contribution to second order, note that only mixed terms survive,
+%
+\begin{equation*}
+\langle D_{-Q_1} D_{-Q_2} \rangle_0
+	= \sum_{q_1, q_2}
+		\langle c_{\downarrow,q_2} \bar{c}_{\downarrow,q_1-Q_1} \rangle_0
+		\langle c_{\downarrow,q_1} \bar{c}_{\downarrow,q_2-Q_2} \rangle_0
+	= - \delta_{Q_2, -Q_1} \sum_{q} G_{0,q}G_{0,q+Q_1},
+\quad
+\text{and}
+\end{equation*}
+%
+\begin{equation*}
+\sum_{Q_1} \langle \big( c_{\omega} \bar{c}_{\omega}  +  \beta G_{0, \omega} \big) C_{Q_1} C_{-Q_1} \rangle_0 
+	= 2 \sum_{k_1, k_2, Q_1}
+		\langle c_{\omega} \bar{c}_{k_1+Q_1} \rangle_0
+		\langle c_{k_2} \bar{c}_{\omega} \rangle_0
+		\langle c_{k_1} \bar{c}_{k_2-Q_1} \rangle_0
+	= -2 \beta G_{0,\omega}^2 \sum_k G_{0,k}
+\, .
+\end{equation*}
+
+It follows that up to second order, the Green's function is given by
+%
+\begin{equation*}
+G(i\omega) = G_{0, \omega} - U^2 G_{0,\omega}^2 
+	\sum_k G_{0,k} \sum_{q} G_{0,q}G_{0,q-k+\omega}
+	= G_{0, \omega} + G_{0,\omega}^2 \Sigma_{\omega}
+\end{equation*}
+%
+where we defined the self energy $\Sigma$ in second order perturbation theory. It takes a simpler form in imaginary time space and remembering that we used an effective interaction, we summarize 
+%
+\begin{equation}
+\Sigma(\tau) = - U^2 G_0(\tau)^2 G_0(-\tau)
+\quad \quad
+\text{with}
+\quad 
+\mu_{\text{eff}} = 0
+\, .
+\end{equation}
+
+
+\section{On the spectral function}
+
+As a measure of single-particle excitation, we consider the spectral function, which is obtained by analytic continuation from the Matsubara Green's function with the known principles:
+%
+\begin{equation}
+\mathcal{A}(w) = - \text{Im} G(i\omega \rightarrow \omega + i0^+) / \pi,
+\quad
+\mathcal{A}(w) \geq 0,
+\quad
+\int_{-\infty}^{\infty} \mathcal{A}(w) \dif \omega = 1,
+\quad
+G(-i\omega) = G(i\omega)^*
+\, .
+\end{equation}
+%
+For a basic propagator of the type $G^{-1} \propto i\omega + a, a \in \mathbb{R}$, it is easily evaluated and yields
+%
+ \begin{equation}
+ G(i\omega) = \frac{c}{i\omega+a} 
+ \quad
+ \Rightarrow
+ \quad
+\mathcal{A}(w) = \delta(w+a)
+\quad
+\Rightarrow
+\quad
+c = 1 
+\, .
+ \end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
