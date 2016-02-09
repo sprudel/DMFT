@@ -1,0 +1,29 @@
+\begin{appendix}
+\section{Implementation Details}
+\subsubsection{Matsubara Frequencies and Fast Fourier Transform}
+In order to solve the impurity model we have to perform several Fourier Transform.
+As we consider electrons, the Green's function in imaginary time is antiperiodic by shifts of $\beta$, so we have to use fermionic Matsubara frequencies $ω_n:=\frac{π(2n+1)}{β}$.
+The Fourier Transformations are given by:
+
+\begin{align}
+  G(i ω_n) &:= \int_0^β dτ G(τ) e^{i ω_n τ}\\
+  G(τ) &= \frac{1}{β} \sum_{i ω_n} G(i ω_n) e^{-i ω_n τ}
+\end{align}
+For effient calculations we use the FFT-algorithm of the numpy package. Therefore we have to adapt our definitions to implementation of the numpy library. The numpy library calculates its Fourier Transform defined as:
+\begin{equation}
+  A_k = \mathrm{FFT}(a_m) =  \sum_{m=0}^{n-1} a_m \exp\left\{-2\pi i{mk \over n}\right\}
+   \qquad k = 0,\ldots,n-1.
+\end{equation}
+Hence, we discretize the Matsubara Fourier transform
+\begin{align}
+  G(i ω_{-n}) &\approx \sum_{k=0}^{N-1} \Delta τ \, G(\Delta τ \, k) \exp{\left(i \frac{π (-2n+1)k}{N}\right)}\\
+          &=\frac{\beta}{N} \sum_{k=o}^{N-1} \left( G(\Delta τ \, k)\exp{\left(i π \frac{k}{N}\right)}  \right)  \exp{\left(i \frac{-2 π n k}{N}\right)}\\
+          &= \frac{\beta}{N} \mathrm{FFT}\left( G(\Delta τ \, k)\exp{\left(i π \frac{k}{N}\right)}\right)
+\end{align}
+where $\Delta τ = \frac{\beta}{N}$.
+The same can be carried out for the inveres Fourier tranform.
+\begin{equation}
+  G(τ_k) = \frac{N}{β} e^{-i π \frac{k}{N}}\frac{1}{N}\sum_{ω_n}G(i ω_n) e^{-i 2π n k/N}
+\end{equation}
+
+\end{appendix}
