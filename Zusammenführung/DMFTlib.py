@@ -103,20 +103,29 @@ def DMFT_loop(G0_initial_omega,U,iterations=1,frac_new=1.):
 
 
 # ## Padé Approximation
+# For the Padé approxmitaion we use only positive frequencies and use the observed symmetry:
+# $$\Im{G(-iω)} = -\Im{G(iω)}$$
+# $$\Re{G(-iω)} = \Re{G(iω)}$$
+# i.e.
+# $$G(-i ω) = G(i ω)^*$$
 
 # In[7]:
 
 class PadeApproximation:
-    def __init__(self, points, values,filter_index=None):
-        #possible to filter specific values eg filter_index = points>0 to filter positive values
-        if filter_index is not None:
-            self.N = points[filter_index].shape[0]
-            self.points = points[filter_index]
-            self.values = values[filter_index]
-        else:
-            self.N = points.shape[0]
-            self.points = points
-            self.values = values
+    def __init__(self, points, values,use_every=1):
+        
+        #first sort frequencies (points = i omega), sort can also sort complex arrays (real first, then complex)
+        #np.arg gives index to sort array
+        index_sorted = np.argsort(points)
+        self.points = points[index_sorted]
+        self.values = values[index_sorted]
+        
+        #only positive freqencies and only use every [use_every] points
+        index_pos = np.imag(self.points)>0
+        self.points = self.points[index_pos][::use_every]
+        self.values = self.values[index_pos][::use_every]
+        
+        self.N = self.points.shape[0]
         
         g_matrix = np.zeros((self.N,self.N),dtype=np.complex256)
         g_matrix[0] = self.values
@@ -124,6 +133,14 @@ class PadeApproximation:
             g_matrix[i,i:] = ( g_matrix[i-1,i-1] - g_matrix[i-1,i:] ) / ( ( self.points[i:] - self.points[i-1] ) * g_matrix[i-1,i:] )
         self.a_coeff = np.diag(g_matrix)
     def __call__(self,z):
+        positive_imag_index = np.imag(z)>0
+        tmp = np.zeros_like(z)
+        #for positive imaginary index do normal procedure
+        tmp[positive_imag_index] = self._evaluate_fit(z[positive_imag_index])
+        #for negative imaginary index use symmetriy
+        tmp[np.logical_not(positive_imag_index)] = np.conjugate(self._evaluate_fit(-z[np.logical_not(positive_imag_index)]))
+        return tmp
+    def _evaluate_fit(self,z):
         Nz = z.shape[0]
         A = np.zeros((self.N+1,Nz),dtype=np.complex256)
         B = np.zeros((self.N+1,Nz),dtype=np.complex256)
