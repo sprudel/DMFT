@@ -2,12 +2,12 @@
 \section{Introduction and Overview}
 The aim of this project is to study the metal to Mott-Insulator phase transition exhibited by the Fermi-Hubbard model.
 
-The model consists of a lattice with a single-level \textit{atom} at every site. The electrons can only hop from a site to a nearest neighbour one, and only interact between them if they're at the same site. The Hamiltonian of this model is, therefore, given by:
+The model consists of a lattice with a single-level \textit{atom} at every site. The electrons can only hop from a site to a nearest neighbour one, and only interact with each other if they are at the same site. The Hamiltonian of this model is, therefore, given by:
 
 \begin{equation}
 \mathcal{H} = -t\sum_{<i,j>}c_{i,\sigma}^\dagger c_{j,\sigma} + h.c.+ U\sum_i n_{i,\uparrow}n_{i,\downarrow} + \mu\sum_i (n_{i,\uparrow}n_{i,\downarrow})
 \end{equation}
-where $t$ is the hopping rate, $U$ the strenght of the interaction, varying which we will observe the P.T., and $\mu$ the chemical potential.
+where $t$ is the hopping rate, $U$ the strenght of the interaction, which by varying will lead to the phase transition, and $\mu$ the chemical potential.
 
 
 
@@ -17,7 +17,7 @@ This model is studied here by means of Dynamical Mean Field Theory~(DMFT), and t
 \begin{equation}\label{orGreen's}
 G_{ii}^\sigma (\tau - \tau^\prime) = -\braket{Tc_{i\sigma}(\tau)c_{i\sigma}^\dagger(\tau^\prime)} 
 \end{equation}
-by means of which it will be then possible to compute the \emph{Spectral Function}.
+by means of which it will then be possible to compute the \emph{Spectral Function}.
 
 ~
 
