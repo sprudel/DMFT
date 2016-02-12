@@ -33,10 +33,10 @@ S = \
 	%\dif \tau
 	\int_0^{\beta} \sum_{\sigma} \bar{c}_{\sigma} (\tau) \partial_{\tau} c_{\sigma} (\tau) 
 	+ \sum_{l, \sigma} \bar{a}_{\sigma} (\tau) \partial_{\tau} a_{\sigma} (\tau)
-	+ H_{\text{AIM}} \big( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau), \bar{a}_{\sigma} (\tau), a_{\sigma} (\tau) \big)
+	+ \mathcal{H}_{\text{AIM}} \big( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau), \bar{a}_{\sigma} (\tau), a_{\sigma} (\tau) \big)
 	\dif \tau
 	\\
-	 = \int_0^{\beta}  H_{\text{atom}} \big( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau) \big)  \dif \tau 
+	 = \int_0^{\beta}  \mathcal{H}_{\text{atom}} \big( \bar{c}_{\sigma} (\tau), c_{\sigma} (\tau) \big)  \dif \tau 
 	+ \sum_{\sigma, \omega} \bar{c}_{\sigma, \omega} 
 	\Big( \sum_{l} \frac{V_l}{i\omega - \tilde{\epsilon}_l} - i\omega \Big)
 	c_{\sigma, \omega} 
@@ -46,7 +46,7 @@ S = \
 	\big( a_{l, \sigma, \omega} + \frac{V_l}{\tilde{\epsilon}_l - i\omega} c_{\sigma, \omega} \big) 
 \end{gather*}
 %
-where some arrangements and usage of the usual Matsubara-Fourier transform was made. We use the convention
+where some arrangements and usage of the usual Matsubara Fourier transform was made. We use the convention
 $
 c_{\sigma} (\tau) = \sum_{\omega} e^{-i\omega \tau} c_{\sigma, \omega}
 $
@@ -69,7 +69,7 @@ S_{\text{eff}} = S_0 + S_{\text{int}} =
 \, .
 \end{gather*}
 
-A perturbative expansion of the Green's function exploits (consider w.l.o.g. $c_{\omega} = c_{\uparrow, \omega}$) 
+A perturbative expansion of the Green's function exploits (considering w.l.o.g. $c_{\omega} = c_{\uparrow, \omega}$):
 %
 \begin{equation*}
 \beta G(i\omega) = - \langle c_{\omega} \bar{c}_{\omega} \rangle
@@ -93,7 +93,7 @@ Here, first order terms vanish due to Wick's theorem and the fact that without i
 \, .
 \end{equation*}
 %
-For the contribution to second order, note that only mixed terms survive,
+For the contribution to second order, note that only mixed terms survive:
 %
 \begin{equation*}
 \langle D_{-Q_1} D_{-Q_2} \rangle_0
@@ -102,7 +102,6 @@ For the contribution to second order, note that only mixed terms survive,
 		\langle c_{\downarrow,q_1} \bar{c}_{\downarrow,q_2-Q_2} \rangle_0
 	= - \delta_{Q_2, -Q_1} \sum_{q} G_{0,q}G_{0,q+Q_1},
 \quad
-\text{and}
 \end{equation*}
 %
 \begin{equation*}
@@ -120,14 +119,14 @@ It follows that up to second order, the Green's function is given by
 \begin{equation*}
 G(i\omega) = G_{0, \omega} - U^2 G_{0,\omega}^2 
 	\sum_k G_{0,k} \sum_{q} G_{0,q}G_{0,q-k+\omega}
-	= G_{0, \omega} + G_{0,\omega}^2 \Sigma_{\omega}
+	= G_{0, \omega} + G_{0,\omega}^2 \Sigma_{\omega}\,,
 \end{equation*}
 %
 where we defined the self energy $\Sigma$ in second order perturbation theory. It takes a simpler form in imaginary time space and remembering that we used an effective interaction, we summarize 
 %
 \begin{equation}
 \label{pert_sigma}
-\Sigma(\tau) = - U^2 G_0(\tau)^2 G_0(-\tau)
+\Sigma_\mathrm{eff}(\tau) = - U^2 G_0(\tau)^2 G_0(-\tau)
 \quad \quad
 \text{with}
 \quad 
@@ -141,15 +140,13 @@ where we defined the self energy $\Sigma$ in second order perturbation theory. I
 For convenience, we use the Bethe lattice with infinite coordination number in our calculations. With proper rescaling, this leads to the density of states (with band-width $D=2t$)
 %
 \begin{equation}
-D(\varepsilon) = \frac{2}{\pi D} \sqrt{ 1-\frac{\varepsilon^2}{D^2} }
+D(\varepsilon) = \frac{2}{\pi D} \sqrt{ 1-\frac{\varepsilon^2}{D^2} }\,,
 \end{equation}
 %
-which has the handy property
+which has the handy property \cite[p. 20]{bethepaper}
 \begin{gather}
 \int\limits_{-D}^{D} \dif \varepsilon 
-\frac{D(\varepsilon)}{DB-\varepsilon} = \tilde{D}(B) 
-\quad \text{which reads for} \quad
-\Im{B} \neq 0,  -1\leq\Re{B}\leq 1 :
+\frac{D(\varepsilon)}{DB-\varepsilon} =: \tilde{D}(B) 
 \\
 \tilde{D}(B) = \frac{2}{\pi D} \left( B \pi + \sqrt{1-B^2}\left[\log{(1-B)}-\log{(B-1)}\right] \right)
 \end{gather}
@@ -157,29 +154,33 @@ which has the handy property
 Employing \eqref{pert_sigma}, we note the simplified relation for \eqref{Gloc_dos}:
 %
 \begin{equation}
-G_{\text{loc}} (i\omega_n) = \tilde{D} \Big( \frac{i\omega_n-\Sigma(i\omega_n)}{D} \Big)
+  G_{\text{loc}} (i\omega_n) = \tilde{D} \Big( \frac{i\omega_n-\Sigma_\mathrm{eff}(i\omega_n)}{D} \Big)
 \, .
+\end{equation}
+For the Bethe lattice \eqref{eq:updateG0} further reduces to \cite[p. 22]{bethepaper}
+\begin{equation}
+  G_{0,\mathrm{new}}(iω) = i ω - \frac{D^2}{4} G_\mathrm{loc}(iω)
 \end{equation}
 
 From the Lehmann representation, one can extract information about the Matsubara Green's function. In terms of eigenstates $\{ | n \rangle \}$ of the full Hamiltonian, one has
 %
 \begin{equation}
-G(\bold{k},i\omega) = \frac{1}{Z} \sum_{n,m} \frac{ e^{-\beta E_n} + e^{-\beta E_m} }{i\omega + E_n - E_m} 
+  G(\bold{k},i\omega) = \frac{1}{\mathcal{Z}} \sum_{n,m} \frac{ e^{-\beta E_n} + e^{-\beta E_m} }{i\omega + E_n - E_m} 
 	| \langle n | c_{\bold{k}} | m \rangle |^2
 \, ,
 \end{equation}
 %
-which implies $G(-i\omega) = G(i\omega)^*$. Moreover, the matrix element ensures that only energies $E_n, E_m$ with states differing in one electron state have non-zero contribution. Thus, $E_n - E_m$ is strongly bounded and for high frequencies, one has
+which implies $G(-i\omega) = G(i\omega)^*$. Moreover, the matrix element ensures that only energies $E_n, E_m$ with states differing in one electron state have non-zero contribution and therefore
 %
-\begin{equation}
+\begin{align}
 \label{G_largefreq}
 G(\bold{k},i\omega) \sim \frac{1}{i\omega} \frac{1}{Z} \sum_{n,m} \big( e^{-\beta E_n} + e^{-\beta E_m} \big)
-	| \langle n | c_{\bold{k}} | m \rangle |^2
-	= \frac{1}{i\omega}
-\quad \text{for }
-| i\omega | \gg E_n - E_m, \langle n | c_{\bold{k}} | m \rangle | \neq 0
-\, .
-\end{equation}
+	| \langle n | c_{\bold{k}} | m \rangle |^2 
+        = \frac{1}{i\omega} \langle \{ c_\bold{k}, c_\bold{k}^\dag \} \rangle = \frac{1}{i\omega}
+\\ \text{for }
+| i\omega | \gg \max{(E_n - E_m)} \text{ s.t. } \langle n | c_{\bold{k}} | m \rangle | \neq 0
+\, . \nonumber
+\end{align}
 
 The spectral function is obtained by analytic continuation from the Matsubara Green's function and has properties proven in a similar way.
 %
@@ -189,7 +190,7 @@ The spectral function is obtained by analytic continuation from the Matsubara Gr
 \mathcal{A}(w) \geq 0,
 \quad
 \int_{-\infty}^{\infty} \mathcal{A}(w) \dif \omega = 1
-\, .
+\, . \label{eq:Aprops}
 \end{equation}
 %
 
