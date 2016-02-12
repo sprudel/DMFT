@@ -19,6 +19,7 @@
 \input{introduction_alex}
 
 \section{The impurity problem in 2\textsuperscript{nd} order perturbation theory}
+\label{sec_impsolv}
 
 Translating the Hamiltonian formalism into a functional integral one, we get the action
 %
@@ -49,7 +50,7 @@ where some arrangements and usage of the usual Matsubara-Fourier transform was m
 $
 c_{\sigma} (\tau) = \sum_{\omega} e^{-i\omega \tau} c_{\sigma, \omega}
 $
-where the sum runs over fermionic Matsubara frequencies and a prefactor of $1/ \beta$ is understood, such that $c_{\sigma, \omega}$ has the dimension of inverse energy. Correspondingly, a Kronecker-delta of Matsubara frequencies contains a factor of $\beta$. In the above expression, the bath can easily be integrated out. The case of half filling, $\mu = U/2$, can be equivalently written with a modified interaction and zero chemical potential. Dropping a constant energy term, one has
+where the sum runs over fermionic Matsubara frequencies and a prefactor of $1/ \beta$ is understood, such that $c_{\sigma, \omega}$ has the dimension of inverse energy. Correspondingly, a Kronecker-delta of Matsubara frequencies contains a factor of $\beta$. In the above expression, the bath can easily be integrated out resulting in a bare propagator $G_0$ depending on the parameters $\tilde{\epsilon}_l$, $V_l$ . The case of half filling, $\mu = U/2$, can be equivalently written with a modified interaction and zero chemical potential. Dropping a constant energy term, one has
 %
 \begin{gather*}
 S_{\text{eff}} = S_0 + S_{\text{int}} =
@@ -59,11 +60,11 @@ S_{\text{eff}} = S_0 + S_{\text{int}} =
 	+ U \sum_{Q} \Big( 
 	\underbrace{
 	\sum_{k} \bar{c}_{\uparrow,k+Q} c_{\uparrow,k} - \frac{1}{2} \delta_{Q,0} 
-	}_{C_Q}
+	}_{ =: C_Q}
 	\Big) \Big(
 	\underbrace{
 	\sum_{q} \bar{c}_{\downarrow,q-Q} c_{\downarrow,q} - \frac{1}{2} \delta_{Q,0}
-	}_{D_{-Q}}
+	}_{ =: D_{-Q}}
 	\Big)
 \, .
 \end{gather*}
@@ -125,6 +126,7 @@ G(i\omega) = G_{0, \omega} - U^2 G_{0,\omega}^2
 where we defined the self energy $\Sigma$ in second order perturbation theory. It takes a simpler form in imaginary time space and remembering that we used an effective interaction, we summarize 
 %
 \begin{equation}
+\label{pert_sigma}
 \Sigma(\tau) = - U^2 G_0(\tau)^2 G_0(-\tau)
 \quad \quad
 \text{with}
@@ -134,39 +136,62 @@ where we defined the self energy $\Sigma$ in second order perturbation theory. I
 \end{equation}
 
 
-\section{On the spectral function}
+\section{General computational aspects}
 
-As a measure of single-particle excitation, we consider the spectral function, which is obtained by analytic continuation from the Matsubara Green's function with the known principles:
+For convenience, we use the Bethe lattice with infinite coordination number in our calculations. With proper rescaling, this leads to the density of states (with band-width $D=2t$)
 %
 \begin{equation}
-	\mathcal{A}(w) = -\frac{1}{\pi} \Im{G(i\omega \rightarrow \omega + i0^+)},
+D(\varepsilon) = \frac{2}{\pi D} \sqrt{ 1-\frac{\varepsilon^2}{D^2} }
+\end{equation}
+%
+which has the handy property
+\begin{gather}
+\int\limits_{-D}^{D} \dif \varepsilon 
+\frac{D(\varepsilon)}{DB-\varepsilon} = \tilde{D}(B) 
+\quad \text{which reads for} \quad
+\Im{B} \neq 0,  -1\leq\Re{B}\leq 1 :
+\\
+\tilde{D}(B) = \frac{2}{\pi D} \left( B \pi + \sqrt{1-B^2}\left[\log{(1-B)}-\log{(B-1)}\right] \right)
+\end{gather}
+%
+Employing \eqref{pert_sigma}, we note the simplified relation for \eqref{Gloc_dos}:
+%
+\begin{equation}
+G_{\text{loc}} (i\omega_n) = \tilde{D} \Big( \frac{i\omega_n-\Sigma(i\omega_n)}{D} \Big)
+\, .
+\end{equation}
+
+From the Lehmann representation, one can extract information about the Matsubara Green's function. In terms of eigenstates $\{ | n \rangle \}$ of the full Hamiltonian, one has
+%
+\begin{equation}
+G(\bold{k},i\omega) = \frac{1}{Z} \sum_{n,m} \frac{ e^{-\beta E_n} + e^{-\beta E_m} }{i\omega + E_n - E_m} 
+	| \langle n | c_{\bold{k}} | m \rangle |^2
+\, ,
+\end{equation}
+%
+which implies $G(-i\omega) = G(i\omega)^*$. Moreover, the matrix element ensures that only energies $E_n, E_m$ with states differing in one electron state have non-zero contribution. Thus, $E_n - E_m$ is strongly bounded and for high frequencies, one has
+%
+\begin{equation}
+\label{G_largefreq}
+G(\bold{k},i\omega) \sim \frac{1}{i\omega} \frac{1}{Z} \sum_{n,m} \big( e^{-\beta E_n} + e^{-\beta E_m} \big)
+	| \langle n | c_{\bold{k}} | m \rangle |^2
+	= \frac{1}{i\omega}
+\quad \text{for }
+| i\omega | \gg E_n - E_m, \langle n | c_{\bold{k}} | m \rangle | \neq 0
+\, .
+\end{equation}
+
+The spectral function is obtained by analytic continuation from the Matsubara Green's function and has properties proven in a similar way.
+%
+\begin{equation}
+\mathcal{A}(w) = -\frac{1}{\pi} \Im{G(i\omega \rightarrow \omega + i0^+)},
 \quad
 \mathcal{A}(w) \geq 0,
 \quad
-\int_{-\infty}^{\infty} \mathcal{A}(w) \dif \omega = 1,
-\quad
-G(-i\omega) = G(i\omega)^*
+\int_{-\infty}^{\infty} \mathcal{A}(w) \dif \omega = 1
 \, .
 \end{equation}
 %
-For a basic propagator of the type $G^{-1} \propto i\omega + a, a \in \mathbb{R}$, it is easily evaluated and yields
-%
- \begin{equation}
- G(i\omega) = \frac{c}{i\omega+a} 
- \quad
- \Rightarrow
- \quad
-\mathcal{A}(w) = c \delta(w+a)
-\quad
-\Rightarrow
-\quad
-c = 1 
-\, .
- \end{equation}
-
-
-
-
 
 
 

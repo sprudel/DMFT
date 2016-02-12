@@ -2,12 +2,14 @@
 \section{Matsubara Frequencies and Fast Fourier Transform}
 In order to solve the impurity model we have to perform several Fourier Transform.
 As we consider electrons, the Green's function in imaginary time is antiperiodic by shifts of $\beta$, so we have to use fermionic Matsubara frequencies $ω_n:=\frac{π(2n+1)}{β}$.
-The Fourier Transformations are given by:
+The Fourier Transformations are given by (no implicit $\beta$):
 
-\begin{align}
-  G(i ω_n) &:= \int_0^β dτ G(τ) e^{i ω_n τ}\\
-  G(τ) &= \frac{1}{β} \sum_{i ω_n} G(i ω_n) e^{-i ω_n τ}
-\end{align}
+\begin{equation}
+  G(i ω_n) := \int_0^β dτ G(τ) e^{i ω_n τ} ,
+  \quad
+  G(τ) = \frac{1}{β} \sum_{i ω_n} G(i ω_n) e^{-i ω_n τ}
+\end{equation}
+%
 For effient calculations we use the FFT-algorithm of the numpy package. Therefore we have to adapt our definitions to the implementation of the numpy library. The numpy library calculates its Fourier Transform by:
 \begin{equation}
   A_k = \mathrm{FFT}(a_m) =  \sum_{m=0}^{n-1} a_m \exp\left\{-2\pi i{mk \over n}\right\}
@@ -31,17 +33,18 @@ The same can be carried out for the inverse Fourier Tranformations.
 	\caption{Comparison of the different discretized Fourier Transformations. The improved version, by manually removing the $\frac{1}{i \omega}$ factor, approximates the exact transformation significantly better. }
 	\label{fig:fourier_traf}
 \end{figure}
-Unfortunately the ``naiv'' implementations \eqref{eq:MFFT} and \eqref{eq:IMFFT} cause numerical problems, since a typical Green's function in frequency space is of the form
-\begin{equation}
-	G(iω_n) = \frac{1}{iω_n +a} = \frac{1}{i ω_n} + \mathcal{O}\left(\frac{1}{ω_n^2}\right).
-	\label{eq:expansion}
-\end{equation}
-Although $a$ can also be frequency dependent, the first term in the expansion of $G$ is always of the form as in \eqref{eq:expansion}.\todo{more details here?} Carrying out the sum over frequencies of this first term does unfortunately not converge, which is why we have to transform the $\frac{1}{i ω_n}$ part manually. %more information here?
-From analytical calculation the Fourier transform is given as:
-\begin{equation}
-	G(τ)=-\frac{1}{2} \quad ⇔ \quad G(i ω_n) =\frac{1}{i ω_n}
+
+Unfortunately the ``naive'' implementations \eqref{eq:MFFT} and \eqref{eq:IMFFT} cause numerical problems, since according to \eqref{G_largefreq} Green's function only decay as $1/ i\omega_n$ in frequency space. As the frequency sum is cut off by the finite number of points used, one strongly increase the accuracy by manually transforming the $1/ i\omega_n$ part. With contour integration, it is commonly shown that ($\tau \neq 0$)
+%
+\begin{gather}
+G(i\omega_n) = \frac{1}{i\omega + a}
+\quad \Leftrightarrow \quad
+G(\tau) = \Theta(\tau) \frac{- e^{a \tau}}{e^{\beta a}+1} + \Theta(-\tau) \frac{e^{a \tau}}{e^{-\beta a}+1} 
+\\
+	G(i ω_n) =\frac{1}{i ω_n} \quad ⇔ \quad G(τ)=-\frac{1}{2} + \Theta(-\tau)
 	\label{eq:ff_pair}
-\end{equation}
+\, .
+\end{gather}
 Consequently the improved version of our Fourier transformation is given by subtracting and adding the relevant terms before and after the transformation.
 \begin{align}
 	G(i ω_{-n})&= \frac{1}{i ω_{-n}}+\frac{\beta}{N} \mathrm{FFT}\left( \left(G(\Delta τ \, k)+\frac{1}{2}\right)\exp{\left(i π \frac{k}{N}\right)}\right)\\

@@ -1,83 +1,89 @@
 
 \section{Introduction and Overview}
+
 The aim of this project is to study the metal to Mott-Insulator phase transition exhibited by the Fermi-Hubbard model.
 
-The model consists of a lattice with a single-level \textit{atom} at every site. The electrons can only hop from a site to a nearest neighbour one, and only interact with each other if they are at the same site. The Hamiltonian of this model is, therefore, given by:
-
+The model consists of a lattice with a single-level \textit{atom} at every site. The electrons can only hop from a site to a nearest neighbor one, and only interact with each other if they are at the same site. The Hamiltonian of this model is, therefore, given by:
+%
 \begin{equation}
-\mathcal{H} = -t\sum_{<i,j>}c_{i,\sigma}^\dagger c_{j,\sigma} + h.c.+ U\sum_i n_{i,\uparrow}n_{i,\downarrow} + \mu\sum_i (n_{i,\uparrow}n_{i,\downarrow})
+\mathcal{H} = -t\sum_{<i,j>}c_{i,\sigma}^\dagger c_{j,\sigma} + h.c.+ U\sum_i n_{i,\uparrow}n_{i,\downarrow} + \mu\sum_i (n_{i,\uparrow} + n_{i,\downarrow})
 \end{equation}
+%
 where $t$ is the hopping rate, $U$ the strenght of the interaction, which by varying will lead to the phase transition, and $\mu$ the chemical potential.
-
-
-
 
 This model is studied here by means of Dynamical Mean Field Theory~(DMFT), and the quantity of interest is the local Green's function, given by:
 
 \begin{equation}\label{orGreen's}
-G_{ii}^\sigma (\tau - \tau^\prime) = -\braket{Tc_{i\sigma}(\tau)c_{i\sigma}^\dagger(\tau^\prime)} 
+G_{\text{loc}} (\tau - \tau^\prime) = -\braket{Tc_{i\sigma}(\tau)c_{i\sigma}^\dagger(\tau^\prime)} 
 \end{equation}
-by means of which it will then be possible to compute the \emph{Spectral Function}.
-
-~
+by means of which it will then be possible to compute the \emph{Spectral Function} as a measure of elementary excitation of the system.
 
 The main idea behind the DMFT approach is similar in spirit to the classical mean field approximation and consists in solving the problem of a single atom coupled to a thermal bath and mapping this to our original lattice problem via a self-consistency relation.
 Such single atom problem is described by the Hamiltonian of a so called \emph{Anderson Impurity Model} (AIM), given by:
-
-\begin{equation}
-\mathcal{H}_{AIM} = \mathcal{H}_{atom} + \mathcal{H}_{bath} + \mathcal{H}_{coupling}
-\end{equation}
-where we have the following:
+%
 \begin{equation}\label{AIMH}
 \begin{array}{c}
-\mathcal{H}_{atom} = Un_\uparrow^cn_\downarrow^c + (\epsilon_0 - \mu)(n_\uparrow^c+n_\downarrow^c) \\ \\ \mathcal{H}_{bath} = \sum_{l,\sigma}\tilde{\epsilon}_la_{l\sigma}^\dagger a_{l\sigma} \\ \\ \mathcal{H}_{coupling} = \sum_{l,\sigma}V_l(a_{l\sigma}^\dagger c_{\sigma} + c_{\sigma}^\dagger a_{l\sigma})
+\mathcal{H}_{\text{AIM}} = \mathcal{H}_{\text{atom}} + \mathcal{H}_{\text{bath}} + \mathcal{H}_{\text{coupling}}
+\quad \quad
+\text{with}
+\quad
+\mathcal{H}_{\text{atom}} = Un_\uparrow^cn_\downarrow^c - \mu (n_\uparrow^c+n_\downarrow^c),
+\\ 
+\\ 
+\mathcal{H}_{\text{bath}} = \sum_{l,\sigma}\tilde{\epsilon}_la_{l\sigma}^\dagger a_{l\sigma},
+\quad
+\mathcal{H}_{\text{coupling}} = \sum_{l,\sigma}V_l(a_{l\sigma}^\dagger c_{\sigma} + c_{\sigma}^\dagger a_{l\sigma})
+\, .
 \end{array}
 \end{equation}
-here, the the $a_l$'s describe the fermionic degrees of freedom of the bath, while the $\tilde{\epsilon_l}'s$ and the $V_l$'s are parameters which must been chosen appopriately (such that the impurity Green's funtion of \eqref{AIMH} coincides with the local lattice one) and enter through the hybridisation function:
+%
+Here, the the $a_l$'s describe the fermionic degrees of freedom of the bath, while the $\tilde{\epsilon_l}'s$ and the $V_l$'s are parameters which must been chosen appopriately (such that the impurity Green's funtion of \eqref{AIMH} coincides with the local lattice one). In chapter \ref{sec_impsolv} we will see how, upon integrating out the bath, these parameters enter into an effective action for the singled out electron. Thereby, the impurity problem is defined with a given bare propagator $G_0$ and a value of the interaction parameter $U$.
 
-\begin{equation}
-\Delta(i\omega_n) = \sum_l\frac{|V_l|^2}{i\omega_n - \tilde{\epsilon}_l}
-\end{equation}
-how it can be seen from the effective action for the system, obtained integrating out the bath degrees of freedom:
-\begin{equation}
-S_{eff} = -\int_0^\beta\int_0^\beta d\tau d\tau^\prime\sum_\sigma c_\sigma^\dagger(\tau)\mathscr{G}_0^{-1}(\tau-\tau^\prime)c_\sigma(\tau^\prime) + U\int_0^\beta d\tau n_\uparrow(\tau)n_\downarrow(\tau)
-\end{equation}
-where we have defined:
-\begin{equation}
-\mathscr{G}_0^{-1}(i\omega_n) = i\omega_n + \mu - \epsilon_0 - \Delta(i\omega_n) 
-\end{equation}
-
-At this point come into play the mean field approximation. First of all, we notice that we can define a local self-energy for the interacting Green's function of the effective AIM, $G(\tau-\tau^\prime)$, via:
-
+At this point, the mean field approximation comes into play. First of all, we notice that we can define a local self-energy for the interacting Green's function of the effective AIM with full Green's function $G$ via:
+%
 \begin{equation}\label{s_imp}
-\Sigma_{imp}(i\omega_n) \equiv \mathscr{G}_0^{-1}(i\omega_n) - G^{-1}(i\omega_n)
+\Sigma_{\text{imp}}(i\omega_n) \equiv G_0^{-1}(i\omega_n) - G^{-1}(i\omega_n)
 \end{equation}
-And, of course, we can also consider the self-energy of our origina lattice problem, defined from \eqref{orGreen's}, via:
-\begin{equation}\label{not_summed_over}
-G(\bold{k},i\omega_n) = \frac{1}{i\omega_n + \mu - \epsilon_0 - \epsilon_{\bold{k}} -\Sigma(\bold{k},i\omega_n)}
-\end{equation}
-with:
-\begin{equation}
-\epsilon_\bold{k} \equiv t\sum_je^{i\bold{k}\cdot(\bold{R_i}-\bold{R_j})}
-\end{equation}
-The approximation, now, consists of saying that the lattice self-energy coincides with the impurity self-energy, resulting in vanishing off-diagonal elements of $\Sigma_{latt}$:
-
-\begin{equation}
-\Sigma_{ii} \simeq \Sigma_{imp} ~ , \Sigma_{i\neq j} \simeq 0
-\end{equation}
-which is a consistent approximation only given that it uniquely determines the local Green's function, which, by assumption, is the impurity problem Green's function. We, therefore, sum \eqref{not_summed_over} over $\bold{k}$ to obtain \eqref{orGreen's}, and use \eqref{s_imp} to arrive to the self-consistency relation:
-\begin{equation}
-\sum_\bold{k}\frac{1}{\Delta(i\omega_n)+G(i\omega_n)^{-1}-\epsilon_\bold{k}} = G(i\omega_n)
+%
+And, of course, we can also consider the self-energy of our original lattice problem, defined from \eqref{orGreen's}, having a dispersion relation $\varepsilon_{\bold{k}}$, via:
+%
+\begin{equation} \label{not_summed_over}
+G_{\text{lattice}}(\bold{k},i\omega_n) = \frac{1}{i\omega_n - \varepsilon_{\bold{k}} + \mu -\Sigma_{\text{lattice}}(\bold{k},i\omega_n)}
+\quad \text{with}
+\quad
+\varepsilon_\bold{k} \equiv t \sum_j e^{i\bold{k} \cdot ( \bold{R_i} - \bold{R_j} )}
+, .
 \end{equation}
 
-This is the idea behind the DMFT approach. In practice one use an iterative procedure, following the loop: 
+
+The approximation, now, consists of saying that the lattice self-energy coincides with the impurity self-energy, resulting in vanishing off-diagonal elements of the lattice self-energy:
+%
+\begin{equation}
+\Sigma_{ii} \simeq \Sigma_{\text{imp}} ~ , \Sigma_{i\neq j} \simeq 0
+\quad \Rightarrow
+\quad
+\Sigma_{\text{lattice}}(\bold{k},i\omega_n) = \Sigma_{\text{imp}}(i\omega_n)
+, .
+\end{equation}
+%
+This is a consistent approximation only given that it uniquely determines the local Green's function, which, by assumption, is the impurity problem Green's function. We, therefore, sum \eqref{not_summed_over} over $\bold{k}$ to obtain \eqref{orGreen's}, and use \eqref{s_imp} to arrive to relate impurity and lattice problem:
+%
+\begin{equation} \label{Gloc_dos}
+G_{\text{loc}}(i\omega_n) = \frac{1}{N} \sum_{\bold{k}} G(\bold{k},i\omega_n) 
+ = \int \dif \varepsilon \frac{D(\varepsilon)}{i\omega_n - \varepsilon + \mu - \Sigma_{\text{imp}}(i\omega_n)},
+\end{equation}
+%
+where we cast the dispersion relation into a density of states $D(\varepsilon)$.
+
+In practice one uses an iterative procedure, following the loop: 
 \begin{enumerate}
-\item start with an initial guess for $\mathscr{G}_0$ (i.e. for $\Delta$);
-\item compute the AIM Green's function $G_{imp}$ (by means of perturbation theory, in our case up to second order) $\rightarrow$ $\Sigma_{imp}$ is computed;
-\item compute the lattice problem local Green's function $G_{loc}$;
-\item update $\mathscr{G}_0$ via $\mathscr{G}_{0,new}^{-1} = G_{loc}^{-1} + \Sigma_{imp}$;
+\item start with an initial guess for $G_0$
+\item compute the AIM Green's function $G$ (by means of perturbation theory, in our case up to second order) $\rightarrow$ $\Sigma_{\text{imp}}$ is computed
+\item compute the lattice problem local Green's function $G_{\text{loc}}$ and require the self-consistency relation to the impurity Greens's function, $G_{\text{loc}} = G$ 
+\item update $G_0$ with the above requirement, 
+$G_{0,\text{new}}^{-1} = G_{\text{loc}}^{-1} + \Sigma_{\text{imp}}$,
 \item iterate till convergence.
 \end{enumerate}
-which is what we have done in the project. Finally, once the lattice local Green's function has been obtained for the set of values $\{i\omega_n\}$, we fit it using the Padé approximation, and, eventually, we are able to compute the Spectral Function, via analytic continuation of this fit.
+which is what we have done in the project. Finally, once the lattice local Green's function has been obtained for the set of values $\{i\omega_n\}$, we interpolate it using the Padé approximation, and, eventually, we are able to compute the Spectral Function, via analytic continuation of function.
 
 
