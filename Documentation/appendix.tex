@@ -50,8 +50,28 @@ Consequently the improved version of our Fourier transformation is given by subt
 \end{align}
 The improvement can be seen in \figref{fig:fourier_traf}, where we compare the exact Fourier transformation of $G(i ω)=\frac{1}{iω+a}$ to our discretized versions. The naiv version shows significant deviations to the analytic solution, whereas our improved version approximates the exact one very well.  
 
+
 \section{Analytic continuation}
-For the anytic continuation of the Matsubara Green's function we have to estimate the functional dependence of $G(iω_n)$. We achived this by using the so called Pade approximation, which fits a rational function to our given discrete values. A efficient way to calculalte the Pade approximation can be found in \todo{ref paper or repeat everything here?}. As the rational function is continous and the Matsubara Green's function exhibits a jump near zero frequency, we can either use data points at positive frequencies or negative frequencies. We assume that the Green's function is analytic in the upper and lower half plane of the complex plane \todo{is this true??????}. Therefore, when calculate the retarded Green's function, which lies slightly above the real axis, we have to use the fit corresponding to the positive frequencies on the imaginary axis. \todo{maybe a plot here?}. 
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{analytic_continuation}
+  \end{center}
+  \caption{As the retarded Green's function (red) lies slightly above the real axis and the Matsubara Green's function shows discontinous jumps at zero frequency, we only take the postive frequencies to calculate the Padé approximation. Assuming that the Green's function is analytic in the upper half plane (blue), we expect the anayltic continuation with the rational function to approxmate the retarded Green's function both for positive and negative frequencies. }
+  \label{fig:analytic_continuation}
+\end{figure}
+
+
+In order to calculate the spectral function $A$, we have to perform the anlytic continuation of the Matsubara Green's function.
+This is a hard problem as we need the functional dependence of $G(iω_n)$ and the only information available is given by discrete points on the imaginary axis.
+The central idea is now to interpolate our discrete points by a rational function, called Pade approximation, and use this function to do the analytic continuation. 
+An efficient algortihm to calculalte the Padé approximation can be found in \cite{padepaper}. However, as the Padé approximation is continous, whereas the Green's function exhibits non-continous jumps, we have to think about, which values to use for the fit.
+
+In the results of the DMFT-loop we observed discontinous jumps in the Matsubara Green's function at zero frequency.
+As we exspect the Greens function to behave non-analytically only on the real axis, we can restrict ourselves on the positive or on the negative frequencies to calculate the fit and use the symmetry of the Greensfunction $G(iω)=G(-iω)^*$ to calculate its values on the opposite half plane.
+
+Since the retared Green's function given by $G(i ω \to w + i o^+)$ lies slightly above the real axis, we can use the positive freqencies on the imaginary axis to calculate the fit and perform the analytic continuation both for positive and negative frequencies of the retarded Green's function as can be seen in \figref{fig:analytic_continuation}.
+
+Furthermore, we homogeneously reduced the number of values to calculate the fit. In some cases this proved to be more stable, which is no surprise, as interpolation polynomials of high degree often shows rapid oscillations.
 
 
 \end{appendix}
