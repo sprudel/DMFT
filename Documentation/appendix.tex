@@ -1,5 +1,11 @@
 \begin{appendix}
 \section{Matsubara Frequencies and Fast Fourier Transform}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Matsubara_Fourier_fig}
+	\caption{Comparison of the different discretized Fourier Transforms. The improved version, by manually transforming the $1/i \omega$ part, approximates the exact transformation significantly better. }
+	\label{fig:fourier_traf}
+\end{figure}
 In order to solve the impurity model we have to perform several Fourier Transforms.
 As we consider electrons, the Green's function in imaginary time is antiperiodic by shifts of $\beta$, so we have to use fermionic Matsubara frequencies $ω_n:=π(2n+1)/β$.
 The Fourier Transformations are given by (no more implicit $\beta$):
@@ -27,12 +33,6 @@ The same can be carried out for the inverse Fourier Tranforms:
 	G(\Delta τ k) &= \frac{N}{β} e^{-i π \frac{k}{N}}\frac{1}{N}\sum_{ω_n}G(i ω_{-n}) e^{i 2π n k/N}\\
 	&= \frac{N}{β} e^{-i π \frac{k}{N}}\mathrm{IFFT}(G(iω_{-n})) \label{eq:IMFFT}.
 \end{align}
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{Matsubara_Fourier_fig}
-	\caption{Comparison of the different discretized Fourier Transforms. The improved version, by manually transforming the $1/i \omega$ part, approximates the exact transformation significantly better. }
-	\label{fig:fourier_traf}
-\end{figure}
 
 Unfortunately the ``naive'' implementations \eqref{eq:MFFT} and \eqref{eq:IMFFT} cause numerical problems, since according to \eqref{G_largefreq} Green's functions only decay as $1/ i\omega_n$ in frequency space. As the frequency sum is cut off by the finite number of points used, one can strongly increase the accuracy by manually transforming the $1/ i\omega_n$ part. By contour integration, it is shown that ($\tau \neq 0$)
 %
@@ -53,11 +53,11 @@ Consequently the improved version of our Fourier transformation for $τ∈[0,β)
 \end{align}
 The improvement can be seen in \figref{fig:fourier_traf}, where we compare the exact Fourier transformation of $G(i ω)=\frac{1}{iω+a}$ to our discretized versions. The naive version shows significant deviations to the analytic solution, whereas our improved version approximates the exact one very well.  
 
-
+\clearpage
 \section{Analytic continuation}
 \begin{figure}[htb]
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{analytic_continuation}
+    \includegraphics[width=0.6\textwidth]{analytic_continuation}
   \end{center}
   \caption{As the retarded Green's function (red) lies slightly above the real axis and the Matsubara Green's function shows discontinuous jumps at zero frequency, we only take the positive frequencies to calculate the Padé approximation. Assuming that the Green's function is analytic in the upper half plane (blue), we expect the analytic continuation with the rational function to approximate the retarded Green's function both for positive and negative frequencies. }
   \label{fig:analytic_continuation}
