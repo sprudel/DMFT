@@ -1,12 +1,12 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 get_ipython().magic('pylab inline')
 
 
-# In[2]:
+# In[ ]:
 
 beta = 100. # inverse temperature
 t = 1. # energy scale for cubic lattice
@@ -15,60 +15,64 @@ D = 1. # energy scale for bethe lattice
 
 # Loading DMFTlib module:
 
-# In[3]:
+# In[ ]:
 
 import DMFTlib
 DMFTlib.initialize(beta_value=beta, bethe_lattice_D=D)
 
 
-# In[40]:
+# In[ ]:
 
-N = 500 # number of imaginary frequencies
+N = 10000 # number of imaginary frequencies
 tau = DMFTlib.matsubara_time(N) # discrete points in imaginary time
 dtau = beta/N
 freq = DMFTlib.matsubara_freq(N) # matsubara frequencies, ordered according to np.fft
 
 
-# In[43]:
+# In[ ]:
 
+U_list = np.linspace(1,4,7)
+numiter = 3200
+
+from multiprocessing import Pool
+def calculate(U):
+    if U>2.5 and U<3.5: #increase iteration near phase transition
+        return DMFTlib.DMFT_loop(G0,U,iterations=numiter*1000,frac_new=0.99)[1]
+    else:
+        return DMFTlib.DMFT_loop(G0,U,iterations=numiter,frac_new=0.99)[1]
+    
 # fit various Green's functions and plot the spectral function
 G0 = 1. / ( 1j*freq + 2. )
-Glocs = []
-U_list = np.array([0.2,0.6,1.,1.45,1.9,5.])
-#U_list = np.array([5.])
-numiter = 100
-for U in U_list:
-    g_0 = G0
-    g_0, g_loc = DMFTlib.DMFT_loop(g_0,U,iterations=numiter,frac_new=1.)
-    Glocs.append(g_loc)
+
+p = Pool(8)
 
 
-# In[49]:
-
-eta = 1e-4
-plot_freq = np.linspace(-5.,5.,100)
-my_freq = plot_freq +  eta*1j
-
-fig, ax = plt.subplots(nrows=len(Glocs),ncols=2,figsize=(15,30))
-fig.tight_layout()
-for index, gf in enumerate(Glocs):
-    padeapp = DMFTlib.PadeApproximation(1j*freq,gf,use_every=10)
-    spectral_func = -padeapp(my_freq).imag
-    fit_plot_freq = np.linspace(freq.min(),freq.max(),5000)
-    fit_func = padeapp(1j*fit_plot_freq)
-    ax[index,0].set_title("U = {}, GF on imaginary frequencies".format(U_list[index]))
-    ax[index,0].plot(freq,gf.imag,'y+',label="GF imag")
-    ax[index,0].plot(fit_plot_freq,fit_func.imag,'g-',label="Fit imag")
-    ax[index,0].plot(freq,gf.real,'b+',label="GF real")
-    ax[index,0].plot(fit_plot_freq,fit_func.real,'r-',label="Fit imag")
-    ax[index,0].set_ylim(-5,5)
-    ax[index,0].legend()  
-    ax[index,1].set_title("U = {}, Spectral Function".format(U_list[index]))
-    ax[index,1].plot(plot_freq,spectral_func,'-')
-    #ax[index,1].set_ylim(0,2)
+Glocs = p.map(calculate,U_list)
+p.terminate()
 
 
 # In[ ]:
 
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans-serif')
+eta = 1e-16
+plot_freq = np.linspace(-5.,5.,1001)
+my_freq = plot_freq +  eta*1j
 
+n = len(Glocs)
+fig, ax = plt.subplots(n, sharex=True, sharey=True, figsize=(10,2*n))
+for index, gf in enumerate(Glocs):
+    padeapp = DMFTlib.PadeApproximation(1j*freq,gf,cut_freq=1.,use_every=3)
+    spectral_func = -padeapp(my_freq,norm=0.1).imag/np.pi
+ 
+    ax[index].plot(plot_freq,spectral_func,'-',label="U/D={}".format(U_list[index]))
+    ax[index].set_ylim(0,0.75)
+    ax[index].set_xlim(-5.,5.)
+    ax[index].legend(frameon=False)
+    ax[index].set_xlabel("$\omega$")
+    ax[index].set_ylabel("$A(\omega)$")
+fig.subplots_adjust(hspace=0)
+ax[0].set_title("Spectral Function")
+
+plt.savefig("Mott_transition.pdf",bbox_inches='tight')
 
